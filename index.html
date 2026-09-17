@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>GACOR HUNTER PRO V5.5</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&family=JetBrains+Mono:wght@400;700&display=swap');
+
+        :root { 
+            --bg-base: #0b1120; 
+            --bg-card: #151e32;
+            --glass: rgba(21, 30, 50, 0.7);
+            --border: rgba(255, 255, 255, 0.08);
+            --text-main: #f8fafc; 
+            --text-muted: #94a3b8;
+            --accent: #00f0ff; 
+            --accent-glow: rgba(0, 240, 255, 0.4);
+            --buy: #10b981; 
+            --wait: #f59e0b; 
+            --skip: #f43f5e; 
+            --btn-blue: linear-gradient(135deg, #3b82f6, #0ea5e9);
+        }
+
+        * { box-sizing: border-box; scroll-behavior: smooth; margin: 0; padding: 0; user-select: none; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: #050810; 
+            color: var(--text-main); 
+            display: flex; justify-content: center;
+        }
+        
+        /* APP WRAPPER (MOBILE LAYOUT) */
+        .app-wrapper {
+            width: 100%; max-width: 480px; 
+            background: var(--bg-base); 
+            min-height: 100vh; position: relative;
+            overflow-x: hidden; padding-bottom: 80px;
+            box-shadow: 0 0 40px rgba(0,0,0,0.8);
+        }
+
+        .view-section { display: none; padding: 15px; animation: fadeIn 0.3s ease-in-out; }
+        .view-active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* HEADER */
+        .app-header { display: flex; justify-content: space-between; align-items: center; padding: 10px 5px 20px; }
+        .app-title { font-size: 22px; font-weight: 800; letter-spacing: 1px; color: var(--accent); line-height: 1.1; text-shadow: 0 0 10px var(--accent-glow); }
+        .app-title span { color: #3b82f6; }
+        .header-icons { display: flex; gap: 15px; font-size: 22px; color: var(--text-muted); }
+        .header-icons span { cursor: pointer; transition: 0.2s; }
+        .header-icons span:hover { color: var(--text-main); }
+
+        /* DASHBOARD SUMMARY */
+        .hero-bar { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px; padding: 0 5px; }
+        .ihsg-block { display: flex; flex-direction: column; }
+        .ihsg-label { font-size: 11px; color: var(--text-muted); letter-spacing: 1px; }
+        .ihsg-value { font-size: 32px; font-weight: 800; color: var(--accent); font-family: 'JetBrains Mono'; margin-top: -2px; }
+        
+        .wallet-block { display: flex; flex-direction: column; align-items: flex-end; }
+        .btn-deposit { 
+            background: var(--btn-blue); color: white; border: none; border-radius: 8px; 
+            padding: 8px 20px; font-weight: 800; font-size: 14px; cursor: pointer; text-align: center;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+        }
+        .btn-deposit small { display: block; font-size: 10px; font-weight: 500; opacity: 0.8; }
+        .saldo-text { font-size: 12px; margin-top: 6px; color: var(--text-muted); }
+        .saldo-text b { color: var(--text-main); font-family: 'JetBrains Mono'; }
+
+        /* TV CHART */
+        .chart-box { 
+            height: 300px; background: var(--bg-card); border-radius: 16px; 
+            border: 1px solid var(--border); overflow: hidden; margin-bottom: 20px; 
+        }
+
+        /* MARKET WEATHER */
+        .weather-card {
+            background: var(--glass); backdrop-filter: blur(10px);
+            border-radius: 16px; border: 1px solid var(--border);
+            padding: 15px; display: flex; align-items: center; gap: 15px; margin-bottom: 25px;
+        }
+        .robot-icon { font-size: 36px; filter: drop-shadow(0 0 8px rgba(255,255,255,0.2)); }
+        .weather-text h4 { font-size: 13px; color: var(--text-main); margin-bottom: 4px; }
+        .weather-text p { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+
+        /* RADAR SCROLL */
+        .section-title { font-size: 13px; font-weight: 800; color: var(--text-main); margin-bottom: 12px; letter-spacing: 1px; }
+        .radar-scroll { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
+        .radar-scroll::-webkit-scrollbar { display: none; }
+        .radar-card { 
+            background: var(--bg-card); min-width: 130px; border-radius: 12px; border: 1px solid var(--border);
+            padding: 12px; flex-shrink: 0; cursor: pointer;
+        }
+        .rc-top { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+        .rc-logo { width: 28px; height: 28px; border-radius: 50%; background: var(--text-main); color: var(--bg-base); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; }
+        .rc-info { display: flex; flex-direction: column; }
+        .rc-ticker { font-size: 13px; font-weight: 800; }
+        .rc-score { font-size: 10px; color: var(--accent); }
+        .rc-setup { font-size: 10px; color: var(--text-muted); background: rgba(0,0,0,0.3); padding: 3px 6px; border-radius: 4px; display: inline-block; }
+
+        /* QUICK ACTIONS */
+        .action-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; text-align: center; margin-bottom: 20px; }
+        .action-btn { cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+        .action-icon { width: 50px; height: 50px; border-radius: 50%; background: var(--bg-card); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 22px; color: var(--accent); box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .action-btn span { font-size: 11px; font-weight: 600; color: var(--text-muted); }
+
+        /* BOTTOM NAV */
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px;
+            background: rgba(11, 17, 32, 0.95); backdrop-filter: blur(15px); border-top: 1px solid var(--border);
+            display: flex; justify-content: space-around; padding: 12px 0 20px 0; z-index: 100;
+        }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 10px; color: #64748b; cursor: pointer; }
+        .nav-item.active { color: var(--accent); }
+        .nav-icon { font-size: 18px; }
+
+        /* AUTH & FORMS */
+        .input-pro { width: 100%; padding: 15px; margin-bottom: 12px; background: rgba(0, 0, 0, 0.3); border: 1px solid var(--border); color: white; border-radius: 10px; font-size: 14px; }
+        .btn-pro { width: 100%; padding: 15px; border: none; border-radius: 10px; font-weight: 800; font-size: 14px; cursor: pointer; background: var(--btn-blue); color: white; }
+        .tab-btn { flex: 1; padding: 12px; font-size: 13px; font-weight: bold; border: none; cursor: pointer; border-radius: 8px; background: transparent; color: var(--text-muted); }
+        .tab-active { background: rgba(255,255,255,0.1); color: var(--text-main); }
+
+        /* SCANNER RESULTS */
+        .result-grid { display: grid; grid-template-columns: 1fr; gap: 15px; margin-top: 20px; }
+        .stat-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05); font-size: 12px; }
+        .stat-val { font-weight: bold; color: var(--text-main); font-family: 'JetBrains Mono', monospace; text-align: right; }
+        
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 1000; }
+        .modal-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; max-width: 420px; padding: 25px; background: var(--bg-card); border-radius: 16px; text-align: center; }
+    </style>
+</head>
+<body>
+
+<div class="app-wrapper">
+
+    <!-- ==================== HALAMAN 1: LOGIN/REGISTER ==================== -->
+    <div id="authPage" class="view-section view-active" style="padding-top: 50px;">
+        <div style="text-align: center; margin-bottom: 30px;">
+            <div class="app-title" style="font-size: 32px;">GACOR HUNTER<br><span>PRO</span></div>
+            <p style="color: var(--text-muted); font-size: 12px; margin-top: 10px;">AI-Driven Algorithmic Trading V5.5</p>
+        </div>
+        
+        <div style="display: flex; gap: 5px; margin-bottom: 20px; background: var(--bg-card); border-radius: 10px; padding: 5px;">
+            <button id="tabLogin" onclick="switchAuthTab('login')" class="tab-btn tab-active">LOGIN</button>
+            <button id="tabReg" onclick="switchAuthTab('register')" class="tab-btn">DAFTAR</button>
+        </div>
+        
+        <div id="formLogin">
+            <input type="text" id="logId" class="input-pro" placeholder="Username / Email" autocomplete="off">
+            <input type="password" id="logPass" class="input-pro" placeholder="Password">
+            <button onclick="doLogin()" id="btnLogin" class="btn-pro">MASUK SISTEM</button>
+        </div>
+        
+        <div id="formReg" style="display: none;">
+            <input type="email" id="regEmail" class="input-pro" placeholder="Email Aktif" autocomplete="off">
+            <input type="text" id="regUser" class="input-pro" placeholder="Buat Username" autocomplete="off">
+            <input type="password" id="regPass" class="input-pro" placeholder="Buat Password">
+            <button onclick="doRegister()" id="btnReg" class="btn-pro" style="background: var(--buy);">DAFTAR & KLAIM AKSES</button>
+        </div>
+    </div>
+
+
+    <!-- ==================== HALAMAN 2: HOME DASHBOARD ==================== -->
+    <div id="homePage" class="view-section">
+        <!-- HEADER -->
+        <div class="app-header">
+            <div class="app-title">GACOR HUNTER<br><span>PRO</span></div>
+            <div class="header-icons">
+                <span onclick="doLogout()" title="Logout">👤</span>
+            </div>
+        </div>
+
+        <!-- HERO / SUMMARY -->
+        <div class="hero-bar">
+            <div class="ihsg-block">
+                <span class="ihsg-label">IHSG LEVEL</span>
+                <div class="ihsg-value" id="topIhsgLevel">...</div>
+            </div>
+            <div class="wallet-block">
+                <button class="btn-deposit" onclick="document.getElementById('topupModal').style.display='block'">
+                    DEPOSIT <small>Gratis <span id="uiKuota">0</span>x</small>
+                </button>
+                <div class="saldo-text">Saldo: <b>Rp <span id="uiSaldo">0</span></b></div>
+            </div>
+        </div>
+
+        <!-- TV CHART -->
+        <div class="chart-box" id="tv_chart_container"></div>
+
+        <!-- MARKET WEATHER -->
+        <div class="weather-card">
+            <div class="robot-icon">🤖</div>
+            <div class="weather-text">
+                <h4 id="topIhsgTrend">Algorithmic Market Weather</h4>
+                <p id="topIhsgDesc">Memuat data analisis pasar dari server backend...</p>
+            </div>
+        </div>
+
+        <!-- TOP 10 RADAR -->
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 12px;">
+            <h3 class="section-title" style="margin: 0;">WATCHLIST (TOP 10 RADAR)</h3>
+        </div>
+        <div class="radar-scroll" id="top10Grid">
+            <div class="radar-card"><div class="rc-ticker" style="color:var(--text-muted)">Syncing data...</div></div>
+        </div>
+
+        <!-- QUICK ACTIONS -->
+        <h3 class="section-title" style="margin-top: 15px;">MENU UTAMA</h3>
+        <div class="action-grid">
+            <div class="action-btn" onclick="navTo('scannerPage')">
+                <div class="action-icon">🎯</div>
+                <span>Scanner</span>
+            </div>
+            <div class="action-btn">
+                <div class="action-icon">👁️</div>
+                <span>Watchlist</span>
+            </div>
+            <div class="action-btn" onclick="navTo('notifPage')">
+                <div class="action-icon" style="position: relative;">
+                    🔔
+                    <div style="position: absolute; top: -2px; right: -2px; background: var(--skip); width: 14px; height: 14px; font-size: 9px; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center;">1</div>
+                </div>
+                <span>Alerts</span>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ==================== HALAMAN 3: SCANNER & RESULT ==================== -->
+    <div id="scannerPage" class="view-section">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+            <div onclick="navTo('homePage')" style="font-size: 20px; cursor: pointer; color: var(--text-muted);">&larr;</div>
+            <h3 class="section-title" style="margin: 0; font-size: 16px;">MARKET SCANNER V5.5</h3>
+        </div>
+
+        <div style="background: var(--bg-card); padding: 20px; border-radius: 16px; border: 1px solid var(--border); text-align: center;">
+            <input type="text" id="tickerInput" class="input-pro" placeholder="KODE TICKER (Misal: BBCA)" style="text-align: center; font-size: 20px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase;">
+            <button id="scanBtn" onclick="startEngine()" class="btn-pro">⚡ JALANKAN ANALISA</button>
+        </div>
+
+        <!-- TRACKER -->
+        <div id="trackerBox" style="display: none; background: #020617; border: 1px solid #3b82f6; padding: 15px; border-radius: 12px; margin-top: 20px; color: #3b82f6; font-family: 'JetBrains Mono', monospace; font-size: 11px;">
+            <div style="font-weight:bold; color: var(--accent);">> INITIALIZING ENGINE...</div>
+            <div id="trackerLog" style="margin-top: 10px; max-height: 150px; overflow-y: auto;"></div>
+        </div>
+
+        <!-- RESULTS DASHBOARD -->
+        <div id="resultBox" style="display: none; margin-top: 20px;">
+            <!-- HERO HEADER -->
+            <div style="background: var(--bg-card); text-align: center; padding: 25px; border-radius: 16px; border: 1px solid var(--border); border-top: 4px solid var(--accent);">
+                <h2 id="outTicker" style="margin: 0; font-size: 38px; color: var(--text-main);">...</h2>
+                <div style="font-size: 12px; color: var(--accent); margin-top: 5px;" id="outStage">STAGE: -</div>
+                <div style="margin-top: 15px;"><span id="outStatus" style="padding: 6px 16px; border-radius: 6px; font-weight: 800; font-size: 14px; color: #fff;">N/A</span></div>
+            </div>
+
+            <div class="result-grid">
+                <!-- PANEL 1: SCORING (Lengkap 100 Poin) -->
+                <div style="background: var(--bg-card); padding: 20px; border-radius: 16px; border: 1px solid var(--border);">
+                    <div style="color: var(--accent); font-weight: 800; font-size: 12px; border-bottom: 1px dashed var(--border); padding-bottom: 10px; margin-bottom: 15px;">⚙️ STRUCTURED SCORING (100)</div>
+                    <div style="text-align:center; margin-bottom:20px;">
+                        <div style="font-size:42px; font-weight:800; font-family:'JetBrains Mono';" id="outTotalScore">0</div>
+                        <div style="width: 100%; background: #0f172a; height: 8px; border-radius: 4px; overflow: hidden; margin-top: 5px;">
+                            <div id="outScoreBar" style="height: 100%; background: var(--accent); width: 0%; transition: width 1s ease;"></div>
+                        </div>
+                    </div>
+                    <div class="stat-row"><span>Structure HH/HL/LH/LL (20)</span><span class="stat-val" id="scStructure">0</span></div>
+                    <div class="stat-row"><span>EMA 5 / 21 + Trend (15)</span><span class="stat-val" id="scEma">0</span></div>
+                    <div class="stat-row"><span>MACD Momentum (10)</span><span class="stat-val" id="scMacd">0</span></div>
+                    <div class="stat-row"><span>Fibonacci / Harmonic S&R (10)</span><span class="stat-val" id="scFibo">0</span></div>
+                    <div class="stat-row"><span>Classic S&R (10)</span><span class="stat-val" id="scClassic">0</span></div>
+                    <div class="stat-row"><span>Dynamic S&R (EMA 21/34/99) (10)</span><span class="stat-val" id="scDynamic">0</span></div>
+                    <div class="stat-row"><span>Momentum + Volume (15)</span><span class="stat-val" id="scMomentum">0</span></div>
+                    <div class="stat-row" style="border:none;"><span>Setup + Risk/Reward (10)</span><span class="stat-val" id="scSetup">0</span></div>
+                </div>
+
+                <!-- PANEL 2: TRADING PLAN -->
+                <div style="background: var(--bg-card); padding: 20px; border-radius: 16px; border: 1px solid var(--border);">
+                    <div style="color: var(--accent); font-weight: 800; font-size: 12px; border-bottom: 1px dashed var(--border); padding-bottom: 10px; margin-bottom: 15px;">🎯 LOGICAL TRADING PLAN</div>
+                    
+                    <div class="stat-row"><span>Realtime Price</span><span class="stat-val" style="color:var(--accent);" id="outPrice">0</span></div>
+                    <div class="stat-row"><span>Arah Dominan</span><span class="stat-val" id="outDirection">-</span></div>
+                    <div class="stat-row"><span>Struktur Swing</span><span class="stat-val" id="outStruct">-</span></div>
+                    <div class="stat-row"><span>EMA 5 / EMA 21</span><span class="stat-val" id="outEma">-</span></div>
+                    <div class="stat-row"><span>MACD</span><span class="stat-val" id="outMacd">-</span></div>
+                    <div class="stat-row"><span>Golden / Death Cross</span><span class="stat-val" id="outCross">-</span></div>
+                    
+                    <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; margin: 15px 0; border: 1px solid rgba(255,255,255,0.05);">
+                        <div style="font-size: 10px; color: var(--text-muted); margin-bottom: 8px;">📍 SUPPORT / RESISTANCE MAP</div>
+                        <div class="stat-row" style="border:none; padding:2px 0;"><span>Classic S/R</span><span class="stat-val"><span id="outClassicS"></span> / <span id="outClassicR"></span></span></div>
+                        <div class="stat-row" style="border:none; padding:2px 0;"><span>Dynamic S/R</span><span class="stat-val"><span id="outDynamicS"></span> / <span id="outDynamicR"></span></span></div>
+                        <div class="stat-row" style="border:none; padding:2px 0;"><span>Fibo S/R</span><span class="stat-val" id="outFibo">-</span></div>
+                    </div>
+
+                    <div style="background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3); padding: 12px; border-radius: 8px; margin-bottom: 10px;">
+                        <div class="stat-row" style="border:none; padding:0;"><span>🛒 STRICT ENTRY ZONE</span><span class="stat-val" style="color:var(--buy)" id="outBuy">-</span></div>
+                        <div style="font-size:10px; color:var(--text-muted); margin-top:8px; line-height: 1.4;" id="outEntryLogic">-</div>
+                    </div>
+                    
+                    <div style="background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.3); padding: 12px; border-radius: 8px; margin-bottom: 10px;">
+                        <div class="stat-row" style="border:none; padding:0;">
+                            <span>⚡ ENTRY TRIGGER</span>
+                            <span class="stat-val" id="outEntryTrigger" style="text-align: right; max-width: 60%; font-size:10px; white-space: normal;">-</span>
+                        </div>
+                    </div>
+
+                    <div style="background: rgba(244,63,94,0.1); border: 1px solid rgba(244,63,94,0.3); padding: 12px; border-radius: 8px; margin-bottom: 15px;">
+                        <div class="stat-row" style="border:none; padding:0;"><span>🛑 INVALIDATION / CUT LOSS</span><span class="stat-val" style="color:var(--skip)" id="outSl">-</span></div>
+                    </div>
+                    
+                    <div class="stat-row"><span>🎯 TP 1</span><span class="stat-val" id="outTp1">-</span></div>
+                    <div class="stat-row"><span>🎯 TP 2</span><span class="stat-val" id="outTp2">-</span></div>
+                    <div class="stat-row"><span>📐 Risk / Reward</span><span class="stat-val" id="outRR">-</span></div>
+                    <div class="stat-row" style="border:none;">
+                        <span>🧭 Exit Trigger</span>
+                        <span class="stat-val" id="outExitTrigger" style="text-align: right; max-width: 60%; font-size:10px; white-space: normal;">-</span>
+                    </div>
+                </div>
+
+                <!-- PANEL 3: SENTIMEN & FUNDAMENTAL -->
+                <div style="background: var(--bg-card); padding: 20px; border-radius: 16px; border: 1px solid var(--border);">
+                    <div style="color: var(--accent); font-weight: 800; font-size: 12px; border-bottom: 1px dashed var(--border); padding-bottom: 10px; margin-bottom: 15px;">📰 SENTIMEN & BERITA HARI INI</div>
+                    <div id="outNews" style="font-size: 11.5px; color: var(--text-muted); line-height: 1.6;">
+                        Mencari data fundamental dan sentimen pasar...
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
+    <!-- ==================== HALAMAN 4: NOTIFIKASI ==================== -->
+    <div id="notifPage" class="view-section">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+            <div onclick="navTo('homePage')" style="font-size: 20px; cursor: pointer; color: var(--text-muted);">&larr;</div>
+            <h3 class="section-title" style="margin: 0; font-size: 16px;">NOTIFIKASI SISTEM</h3>
+        </div>
+        
+        <div style="background: var(--bg-card); padding: 15px; border-radius: 12px; border-left: 4px solid var(--buy); margin-bottom: 15px;">
+            <div style="font-size: 10px; color: var(--text-muted);">Informasi Kuota Harian</div>
+            <div style="font-size: 13px; font-weight: 800; margin: 6px 0;">🎉 Pembaruan Kuota Analisa</div>
+            <div style="font-size: 11px; color: var(--text-muted); line-height: 1.5;">
+                Pendaftaran baru mendapatkan gratis <b>10x Analisa</b>. Di hari-hari berikutnya, sistem akan memberikan <b>5x Kuota Gratis</b> yang direset secara otomatis.
+            </div>
+        </div>
+        
+        <div style="background: var(--bg-card); padding: 15px; border-radius: 12px; border-left: 4px solid var(--accent); margin-bottom: 15px;">
+            <div style="font-size: 10px; color: var(--text-muted);">Sistem Trading</div>
+            <div style="font-size: 13px; font-weight: 800; margin: 6px 0;">🤖 Update Algoritma V5.5</div>
+            <div style="font-size: 11px; color: var(--text-muted); line-height: 1.5;">
+                Algoritma scoring 100 poin dan Market Weather kini telah dimaksimalkan untuk performa yang lebih akurat.
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ==================== BOTTOM NAVIGATION (Update) ==================== -->
+    <nav class="bottom-nav">
+        <div class="nav-item active" onclick="navTo('homePage', this)">
+            <div class="nav-icon">🏠</div>
+            <span>Beranda</span>
+        </div>
+        <div class="nav-item" onclick="navTo('notifPage', this)">
+            <div class="nav-icon">🔔</div>
+            <span>Notifikasi</span>
+        </div>
+        <!-- Ikon Profil Dihapus. Menu Admin diubah jadi Komunitas -->
+        <div class="nav-item" onclick="document.getElementById('adminModal').style.display='block'">
+            <div class="nav-icon">🛡️</div>
+            <span>Komunitas</span>
+        </div>
+    </nav>
+    
+</div>
+
+<!-- MODAL TOP UP -->
+<div id="topupModal" class="modal-overlay">
+    <div class="modal-content">
+        <h3 style="margin-top: 0; color: var(--accent);">Top Up Saldo Analisa</h3>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 15px; line-height:1.4;">
+            Tarif: <b>Rp 1.000 / Analisa</b>.<br>Scan QRIS via DANA / Gopay / M-Banking.
+        </p>
+        <div style="background: white; padding: 10px; border-radius: 12px; margin-bottom: 15px;"><img src="image_2b56c1.jpg" alt="QRIS" style="width: 100%; border-radius: 8px;"></div>
+        <input type="number" id="nominalTopup" class="input-pro" placeholder="Nominal (Min 10.000)" style="background: rgba(255,255,255,0.05);">
+        <button onclick="konfirmasiWA()" class="btn-pro" style="background: #25D366; margin-bottom: 10px;">📲 Konfirmasi WA</button>
+        <button onclick="document.getElementById('topupModal').style.display='none'" class="btn-pro" style="background: transparent; border: 1px solid var(--skip); color: var(--skip);">Batal</button>
+    </div>
+</div>
+
+<!-- MODAL KOMUNITAS / ADMIN -->
+<div id="adminModal" class="modal-overlay">
+    <div class="modal-content">
+        <h3 style="margin-top: 0; color: var(--accent);">Bantuan & Komunitas</h3>
+        <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 20px;">Gabung komunitas resmi kami di Discord atau hubungi Admin via WhatsApp.</p>
+        <button onclick="window.open('https://discord.gg/tTZX5xg4y', '_blank')" class="btn-pro" style="background: #5865F2; margin-bottom: 10px;">🎮 GABUNG DISCORD</button>
+        <button onclick="window.open('https://wa.me/6281462364686', '_blank')" class="btn-pro" style="background: #25D366; margin-bottom: 10px;">📲 HUBUNGI ADMIN (WA)</button>
+        <button onclick="document.getElementById('adminModal').style.display='none'" class="btn-pro" style="background: transparent; border: 1px solid var(--skip); color: var(--skip);">TUTUP</button>
+    </div>
+</div>
+
+<script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+<script>
+    // =========================================================================
+    // URL WEB APP ANDA
+    // =========================================================================
+    const GOOGLE_PROXY_URL = "https://script.google.com/macros/s/AKfycbwU3WKJmGywKXBUrY2sS7rrirPFC6DqPxmRKmzkXCWRctqSYMLM9R2hxDMSsDUsfAk/exec";
+    
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    const formatNumber = num => num < 10 ? num.toFixed(2) : Math.round(num).toLocaleString('id-ID');
+
+    function navTo(pageId, navElement) {
+        document.querySelectorAll('.view-section').forEach(el => el.classList.remove('view-active'));
+        document.getElementById(pageId).classList.add('view-active');
+        
+        if(navElement) {
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            navElement.classList.add('active');
+        }
+        window.scrollTo(0,0);
+    }
+
+    function switchAuthTab(tab) {
+        if(tab === 'login') {
+            document.getElementById('formLogin').style.display = "block"; document.getElementById('formReg').style.display = "none";
+            document.getElementById('tabLogin').classList.replace('tab-inactive', 'tab-active'); document.getElementById('tabReg').classList.replace('tab-active', 'tab-inactive');
+            document.getElementById('tabReg').style.background = "transparent";
+            document.getElementById('tabLogin').style.background = "rgba(255,255,255,0.1)";
+        } else {
+            document.getElementById('formLogin').style.display = "none"; document.getElementById('formReg').style.display = "block";
+            document.getElementById('tabReg').classList.replace('tab-inactive', 'tab-active'); document.getElementById('tabLogin').classList.replace('tab-active', 'tab-inactive');
+            document.getElementById('tabLogin').style.background = "transparent";
+            document.getElementById('tabReg').style.background = "rgba(255,255,255,0.1)";
+        }
+    }
+
+    async function doRegister() {
+        let em = document.getElementById('regEmail').value.trim(), us = document.getElementById('regUser').value.trim(), pw = document.getElementById('regPass').value.trim();
+        if(!em || !us || !pw) return alert("Semua kolom wajib diisi!");
+        document.getElementById('btnReg').innerText = "MENDAFTARKAN...";
+        try {
+            let res = await fetch(`${GOOGLE_PROXY_URL}?action=auth&type=register&email=${encodeURIComponent(em)}&username=${encodeURIComponent(us)}&password=${encodeURIComponent(pw)}`);
+            let data = await res.json();
+            if(data.status === "success") {
+                localStorage.setItem("gacor_email", data.email || em); 
+                localStorage.setItem("gacor_user", data.username || us); 
+                localStorage.setItem("gacor_pass", pw);
+                localStorage.setItem("gacor_kuota", data.kuota !== undefined ? data.kuota : 10);
+                localStorage.setItem("gacor_saldo", data.saldo !== undefined ? data.saldo : 10000); 
+                
+                alert("Pendaftaran Berhasil! Kuota & Saldo awal siap digunakan.");
+                checkAuth();
+            } else { alert(data.message); }
+        } catch(e) { alert("Gagal terhubung ke server."); }
+        document.getElementById('btnReg').innerText = "DAFTAR & KLAIM AKSES";
+    }
+
+    async function doLogin() {
+        let id = document.getElementById('logId').value.trim();
+        let pw = document.getElementById('logPass').value.trim();
+        if(!id || !pw) return alert("Isi Username dan Password Anda!");
+        
+        let btn = document.getElementById('btnLogin');
+        btn.innerText = "MEMERIKSA...";
+        
+        try {
+            let res = await fetch(`${GOOGLE_PROXY_URL}?action=auth&type=login&login_id=${encodeURIComponent(id)}&password=${encodeURIComponent(pw)}`);
+            let data = await res.json();
+            
+            if(data.status === "success") {
+                localStorage.setItem("gacor_email", data.email || id); 
+                localStorage.setItem("gacor_user", data.username || id); 
+                localStorage.setItem("gacor_pass", pw); 
+                localStorage.setItem("gacor_kuota", data.kuota !== undefined ? data.kuota : 10);
+                localStorage.setItem("gacor_saldo", data.saldo !== undefined ? data.saldo : 10000);
+                await checkAuth(); 
+            } else { alert(data.message || "Username/Password salah!"); }
+        } catch(e) { alert("Gagal terhubung ke server."); }
+        btn.innerText = "MASUK SISTEM";
+    }
+
+    function doLogout() { 
+        localStorage.removeItem("gacor_email"); localStorage.removeItem("gacor_user"); 
+        localStorage.removeItem("gacor_pass"); localStorage.removeItem("gacor_kuota"); 
+        localStorage.removeItem("gacor_saldo");
+        navTo('authPage');
+        document.querySelector('.bottom-nav').style.display = "none";
+    }
+    
+    async function checkAuth() {
+        let savedUser = localStorage.getItem("gacor_user");
+        let savedEmail = localStorage.getItem("gacor_email");
+        let savedPass = localStorage.getItem("gacor_pass");
+        
+        let k = parseInt(localStorage.getItem("gacor_kuota"));
+        let s = parseInt(localStorage.getItem("gacor_saldo"));
+        let savedKuota = isNaN(k) ? 10 : k;
+        let savedSaldo = isNaN(s) ? 10000 : s;
+
+        if (!savedPass || savedPass === "undefined") {
+            navTo('authPage');
+            document.querySelector('.bottom-nav').style.display = "none";
+            return false;
+        }
+
+        navTo('homePage');
+        document.querySelector('.bottom-nav').style.display = "flex";
+        document.getElementById('uiKuota').innerText = savedKuota; 
+        document.getElementById('uiSaldo').innerText = formatNumber(savedSaldo);
+
+        try {
+            let loginId = savedUser || savedEmail;
+            let res = await fetch(`${GOOGLE_PROXY_URL}?action=auth&type=login&login_id=${encodeURIComponent(loginId)}&password=${encodeURIComponent(savedPass)}`);
+            let data = await res.json();
+            
+            if (data.status === "success") {
+                let liveKuota = (data.kuota !== undefined && data.kuota !== null) ? parseInt(data.kuota) : savedKuota;
+                let liveSaldo = (data.saldo !== undefined && data.saldo !== null) ? parseInt(data.saldo) : savedSaldo;
+                
+                if(isNaN(liveKuota)) liveKuota = 5; if(isNaN(liveSaldo)) liveSaldo = 10000;
+                document.getElementById('uiKuota').innerText = liveKuota; 
+                document.getElementById('uiSaldo').innerText = formatNumber(liveSaldo);
+                
+                localStorage.setItem("gacor_kuota", liveKuota); localStorage.setItem("gacor_saldo", liveSaldo);
+                localStorage.setItem("gacor_user", data.username || savedUser);
+                return true;
+            } else { doLogout(); return false; }
+        } catch (e) { return true; }
+    }
+    
+    function konfirmasiWA() {
+        let username = localStorage.getItem("gacor_user") || "Belum Login";
+        let nominal = document.getElementById("nominalTopup").value;
+        if(!nominal || nominal < 10000) return alert("Minimal top-up Rp 10.000");
+        let pesan = `Halo Admin Gacor Hunter,\n\nSaya mau konfirmasi Top-Up Saldo Analisa (Tarif Rp 1.000/Analisa).\n👤 Username Akun: *${username}*\n💰 Nominal: *Rp${nominal}*\n\nBerikut lampiran screenshot bukti transfer QRIS.`;
+        window.open(`https://wa.me/6281462364686?text=${encodeURIComponent(pesan)}`, '_blank');
+        document.getElementById('topupModal').style.display='none';
+    }
+
+    // =========================================================================
+    // TRADING ENGINE
+    // =========================================================================
+    const average = arr => arr.length ? arr.reduce((a,b)=>a+b,0)/arr.length : 0;
+    const highest = arr => arr.length ? Math.max(...arr) : 0;
+    const lowest = arr => arr.length ? Math.min(...arr) : 0;
+    const calcEMA = (arr, period) => {
+        if(!arr?.length) return 0;
+        const k=2/(period+1); let ema=arr[0];
+        for(let i=1;i<arr.length;i++) ema=arr[i]*k+ema*(1-k);
+        return ema;
+    };
+    const emaSeries = (arr, period) => {
+        if(!arr?.length) return [];
+        const out=[arr[0]], k=2/(period+1);
+        for(let i=1;i<arr.length;i++) out[i]=arr[i]*k+out[i-1]*(1-k);
+        return out;
+    };
+    const calcRSI = (closes, period) => {
+        if(!closes || closes.length<=period) return 50;
+        let gains=0,losses=0;
+        for(let i=1;i<=period;i++){const d=closes[i]-closes[i-1];if(d>0)gains+=d;else losses+=Math.abs(d);}
+        let avgGain=gains/period, avgLoss=losses/period;
+        for(let i=period+1;i<closes.length;i++){
+            const d=closes[i]-closes[i-1];
+            avgGain=(avgGain*(period-1)+(d>0?d:0))/period;
+            avgLoss=(avgLoss*(period-1)+(d<0?Math.abs(d):0))/period;
+        }
+        if(avgLoss===0)return 100;
+        return 100-(100/(1+avgGain/avgLoss));
+    };
+    const calcMACD = closes => {
+        const e12=emaSeries(closes,12),e26=emaSeries(closes,26);
+        const macd=closes.map((_,i)=>e12[i]-e26[i]),signal=emaSeries(macd,9);
+        return {macd,signal,hist:macd.map((v,i)=>v-signal[i])};
+    };
+    function extractValidData(q){
+        if(!q)return null;
+        const closes=[],highs=[],lows=[],volumes=[];
+        for(let i=0;i<q.close.length;i++){
+            if(q.close[i]!=null&&q.high[i]!=null&&q.low[i]!=null){
+                closes.push(Number(q.close[i]));highs.push(Number(q.high[i]));lows.push(Number(q.low[i]));volumes.push(Number(q.volume[i]||0));
+            }
+        }
+        return {closes,highs,lows,volumes};
+    }
+    async function fetchYahooData(ticker){
+        try{
+            const res = await fetch(`${GOOGLE_PROXY_URL}?ticker=${encodeURIComponent(ticker)}`);
+            if(!res.ok) return { error: true };
+            const data = await res.json();
+            if (data.status === "error") return { error: true };
+            return data?.chart?.result?.[0]?.indicators?.quote?.[0] || null;
+        }catch(e){ return { error: true }; }
+    }
+    function getPivots(highs,lows,lookback=2){
+        const highPivots=[],lowPivots=[];
+        for(let i=lookback;i<highs.length-lookback;i++){
+            let hi=true,lo=true;
+            for(let j=1;j<=lookback;j++){
+                if(!(highs[i]>highs[i-j]&&highs[i]>=highs[i+j]))hi=false;
+                if(!(lows[i]<lows[i-j]&&lows[i]<=lows[i+j]))lo=false;
+            }
+            if(hi)highPivots.push({index:i,price:highs[i]});
+            if(lo)lowPivots.push({index:i,price:lows[i]});
+        }
+        return {highPivots,lowPivots};
+    }
+    function nearestBelow(values,price){const x=values.filter(v=>Number.isFinite(v)&&v<price);return x.length?Math.max(...x):0;}
+    function nearestAbove(values,price){const x=values.filter(v=>Number.isFinite(v)&&v>price);return x.length?Math.min(...x):0;}
+    function fmtRange(a,b){if(!a||!b)return "-";return `${formatNumber(Math.min(a,b))} - ${formatNumber(Math.max(a,b))}`;}
+    function buildStructure(p){
+        const hs=p.highPivots.slice(-3),ls=p.lowPivots.slice(-3);
+        if(hs.length<2||ls.length<2)return {label:"UNDEFINED",bullish:false,bearish:false};
+        const lh=hs.at(-1).price,ph=hs.at(-2).price,ll=ls.at(-1).price,pl=ls.at(-2).price;
+        if(lh>ph&&ll>pl)return {label:"HH + HL (UPTREND)",bullish:true,bearish:false};
+        if(lh<ph&&ll<pl)return {label:"LH + LL (DOWNTREND)",bullish:false,bearish:true};
+        if(lh>ph&&ll<pl)return {label:"EXPANSION / MIXED",bullish:false,bearish:false};
+        return {label:"RANGE / TRANSITION",bullish:false,bearish:false};
+    }
+    function fibMap(swingLow,swingHigh,bullish){
+        if(!(swingHigh>swingLow))return null;
+        const r=swingHigh-swingLow;
+        if(bullish)return {0:swingHigh,.236:swingHigh-r*.236,.382:swingHigh-r*.382,.5:swingHigh-r*.5,.618:swingHigh-r*.618,.786:swingHigh-r*.786,1:swingLow};
+        return {0:swingLow,.236:swingLow+r*.236,.382:swingLow+r*.382,.5:swingLow+r*.5,.618:swingLow+r*.618,.786:swingLow+r*.786,1:swingHigh};
+    }
+    function buildPlan(price,direction,setup,supports,resistances,atr){
+        const S=supports.filter(x=>x>0&&x<price).sort((a,b)=>b-a)[0]||price-atr;
+        const R=resistances.filter(x=>x>price).sort((a,b)=>a-b)[0]||price+Math.max(atr*2,price*.04);
+        let entryLow=0,entryHigh=0,stop=0,tp1=0,tp2=0,trigger="",logic="";
+        if(direction==="BEARISH"){
+            trigger="NO LONG ENTRY — tunggu reclaim EMA21 + HL baru";
+            logic="Struktur bearish (LH/LL). Engine tidak memaksakan posisi BUY.";
+        }else if(setup==="BREAKOUT"){
+            const breakoutR = resistances.filter(x=>x>0).sort((a,b)=>b-a).find(x=>Math.abs(x-price)/price<.03)||R;
+            entryLow=breakoutR*.995;entryHigh=breakoutR*1.005;
+            stop=Math.min(breakoutR-Math.max(atr*.7,price*.015),S-atr*.25);
+            tp1=R>entryHigh?R:entryHigh+Math.max(atr*2,price*.04);
+            tp2=tp1+Math.max(atr*1.5,price*.03);
+            trigger=`Close > ${formatNumber(breakoutR)} + volume ≥ 1.5x, lalu retest bertahan`;
+            logic=`Entry hanya di area retest level breakout ${formatNumber(breakoutR)}; tidak mengejar harga.`;
+        }else{
+            entryLow=Math.max(S*.995,S+atr*.15);entryHigh=Math.min(S*1.01,price);
+            if(entryLow>entryHigh){entryLow=Math.max(S*.995,price*.985);entryHigh=price;}
+            stop=S-Math.max(atr*.7,price*.015);
+            tp1=R>entryHigh?R:entryHigh+Math.max(atr*2,price*.04);
+            tp2=tp1+Math.max(atr*1.5,price*.03);
+            trigger=`Pantulan ${formatNumber(S)} + candle bullish + close kembali di atas EMA21`;
+            logic=`Entry ditempatkan dekat support terdekat (${formatNumber(S)}), bukan range arbitrer yang menjauh dari harga.`;
+        }
+        const mid=entryLow&&entryHigh?(entryLow+entryHigh)/2:0, rr=mid&&stop&&tp1>mid?(tp1-mid)/(mid-stop):0;
+        return {entryLow,entryHigh,stop,tp1,tp2,rr,trigger,logic};
+    }
+    
+    function updateLog(msg) {
+        let logDiv = document.getElementById("trackerLog");
+        logDiv.innerHTML += `<div>[${new Date().toLocaleTimeString('id-ID')}] ${msg}</div>`;
+        logDiv.scrollTop = logDiv.scrollHeight;
+    }
+
+    async function startEngine() {
+    // Paksa sistem untuk selalu menggunakan Email ke backend
+    let identitas = localStorage.getItem("gacor_email");
+
+    if (!identitas) { alert("Harap login kembali"); return doLogout(); }
+
+        let ticker = document.getElementById("tickerInput").value.trim().toUpperCase();
+        if (!ticker) return;
+        if (!ticker.includes('.')) ticker += ".JK"; 
+
+        document.getElementById("scanBtn").disabled = true;
+        document.getElementById("resultBox").style.display = "none";
+        document.getElementById("trackerBox").style.display = "block";
+        document.getElementById("trackerLog").innerHTML = "";
+        
+        try {
+            updateLog(`Menghubungkan ke bursa untuk $${ticker}...`);
+            const stockQuote = await fetchYahooData(ticker);
+            if (stockQuote && stockQuote.error) throw new Error("⚠️ Server IDX gangguan. Coba lagi nanti.");
+            if (!stockQuote) throw new Error("Data saham tidak ditemukan.");
+            
+            updateLog("Memverifikasi kuota & saldo harian user...");
+            let resAuth = await fetch(`${GOOGLE_PROXY_URL}?action=auth&type=use_quota&email=${encodeURIComponent(identitas)}`);
+            let dataAuth = await resAuth.json();
+            
+            if (dataAuth.status !== "success") throw new Error("❌ " + dataAuth.message);
+            
+            document.getElementById('uiKuota').innerText = dataAuth.remain_kuota;
+            document.getElementById('uiSaldo').innerText = formatNumber(dataAuth.remain_saldo);
+            localStorage.setItem("gacor_kuota", dataAuth.remain_kuota);
+            localStorage.setItem("gacor_saldo", dataAuth.remain_saldo);
+
+            updateLog(`Akses diizinkan via jalur: ${dataAuth.type}. Kalkulasi V5.5...`);
+
+            const stockData = extractValidData(stockQuote);
+            const closes = stockData.closes, volumes = stockData.volumes, highs = stockData.highs, lows = stockData.lows;
+            if (closes.length < 120) throw new Error("Data historis tidak mencukupi (minimal 120 hari).");
+
+            const currClose=closes.at(-1), prevClose=closes.at(-2);
+            const return1d=prevClose?((currClose-prevClose)/prevClose)*100:0;
+            const close5d=closes.at(-6), return5d=close5d?((currClose-close5d)/close5d)*100:0;
+            const e5=emaSeries(closes,5),e21=emaSeries(closes,21),e34=emaSeries(closes,34),e99=emaSeries(closes,99);
+            const ema5=e5.at(-1),ema21=e21.at(-1),ema34=e34.at(-1),ema99=e99.at(-1);
+            const macd=calcMACD(closes),macdLine=macd.macd.at(-1),signalLine=macd.signal.at(-1),macdHist=macd.hist.at(-1);
+            const prevE5=e5.at(-2),prevE21=e21.at(-2);
+            const goldenCross=prevE5<=prevE21&&ema5>ema21, deathCross=prevE5>=prevE21&&ema5<ema21;
+            const rsi=calcRSI(closes,14);
+
+            const currVol=volumes.at(-1),avgVol20=average(volumes.slice(-21,-1)),volRatio=avgVol20?currVol/avgVol20:0;
+            const trs=[]; for(let i=Math.max(1,closes.length-20);i<closes.length;i++)
+                trs.push(Math.max(highs[i]-lows[i],Math.abs(highs[i]-closes[i-1]),Math.abs(lows[i]-closes[i-1])));
+            const atr=average(trs)||currClose*.02;
+
+            const piv=getPivots(highs,lows,2),structure=buildStructure(piv);
+            const recentH=piv.highPivots.slice(-10).map(x=>x.price),recentL=piv.lowPivots.slice(-10).map(x=>x.price);
+            const classicS=nearestBelow(recentL,currClose)||lowest(lows.slice(-20));
+            const classicR=nearestAbove(recentH,currClose)||highest(highs.slice(-20));
+
+            const win=Math.min(80,closes.length),startIdx=closes.length-win;
+            let hiI=startIdx,loI=startIdx;
+            for(let i=startIdx;i<closes.length;i++){if(highs[i]>highs[hiI])hiI=i;if(lows[i]<lows[loI])loI=i;}
+            const swingHigh=highs[hiI],swingLow=lows[loI],fib=fibMap(swingLow,swingHigh,structure.bullish||currClose>ema21);
+            const fibS=fib?nearestBelow(Object.values(fib),currClose):0, fibR=fib?nearestAbove(Object.values(fib),currClose):0;
+
+            const dynS=nearestBelow([ema21,ema34,ema99],currClose)||Math.min(ema21,ema34,ema99);
+            const dynR=nearestAbove([ema21,ema34,ema99],currClose)||Math.max(ema21,ema34,ema99);
+
+            const emaBull=ema5>ema21&&ema21>ema34, emaBear=ema5<ema21&&ema21<ema34;
+            let direction="SIDEWAYS";
+            if(structure.bullish&&emaBull&&currClose>ema21&&macdLine>signalLine)direction="BULLISH";
+            else if(structure.bearish&&emaBear&&currClose<ema21&&macdLine<signalLine)direction="BEARISH";
+            else if(currClose>ema21&&ema5>ema21&&macdLine>signalLine)direction="BULLISH";
+            else if(currClose<ema21&&ema5<ema21&&macdLine<signalLine)direction="BEARISH";
+
+            let setup="RANGE / WAIT";
+            if(direction==="BULLISH"&&classicR&&currClose>=classicR*.995&&volRatio>=1.5)setup="BREAKOUT";
+            else if(direction==="BULLISH"&&ema5>ema21&&currClose<=ema21*1.025&&currClose>=dynS*.985)setup="PULLBACK TO DYNAMIC SUPPORT";
+            else if(direction==="BULLISH"&&structure.bullish)setup="TREND CONTINUATION";
+            else if(direction==="BEARISH")setup="DOWNTREND / NO LONG";
+
+            let scStructure=structure.bullish?20:structure.bearish?0:structure.label==="EXPANSION / MIXED"?10:7;
+            let scEma=(ema5>ema21?6:0)+(ema21>ema34?4:0)+(ema34>ema99?3:0)+(currClose>ema21?2:0);
+            let scMacd=(macdLine>signalLine?5:0)+(macdLine>0?3:0)+(macdHist>0?2:0);
+            let scFibo=fibS&&currClose>fibS?(Math.abs(currClose-fibS)/currClose<=.03?10:7):3;
+            const dS=classicS?Math.abs(currClose-classicS)/currClose:1,dR=classicR?Math.abs(classicR-currClose)/currClose:1;
+            let scClassic=Math.min(10,(dS<=.03?7:4)+((dR<=.03&&volRatio>=1.5)?3:0));
+            let scDynamic=(currClose>ema21?4:0)+(ema21>ema34?3:0)+(currClose>ema99?3:0);
+            let scMomentum=(rsi>=55&&rsi<=70?6:rsi>50?3:0)+(return5d>0?3:0)+(volRatio>=2?6:volRatio>=1.5?4:volRatio>=1.2?2:0);
+            let scSetup=setup==="BREAKOUT"?8:setup==="PULLBACK TO DYNAMIC SUPPORT"?7:setup==="TREND CONTINUATION"?6:direction==="SIDEWAYS"?4:0;
+
+            const plan=buildPlan(currClose,direction,setup,[classicS,dynS,fibS,ema21,ema34],[classicR,dynR,fibR],atr);
+            if(plan.rr>=2)scSetup=Math.min(10,scSetup+2); else if(plan.rr>=1.5)scSetup=Math.min(10,scSetup+1);
+            else if(direction==="BULLISH"&&plan.rr<1.2)scSetup=Math.max(0,scSetup-2);
+
+            const totalScore=Math.min(100,scStructure+scEma+scMacd+scFibo+scClassic+scDynamic+scMomentum+scSetup);
+            const finalStatus=direction==="BEARISH"?"SKIP":(totalScore>=75&&(plan.rr>=1.5||setup==="BREAKOUT")?"BUY":totalScore>=60?"WAIT":"SKIP");
+            
+            const crossLabel=goldenCross?"GOLDEN CROSS":deathCross?"DEATH CROSS":(ema5>ema21?"BULLISH ALIGNMENT":"BEARISH ALIGNMENT");
+            const macdLabel=`${macdLine>=signalLine?"BULLISH":"BEARISH"} • Hist ${macdHist>=0?"+":""}${macdHist.toFixed(2)}`;
+
+            updateLog("Selesai mengkalkulasi. Render panel...");
+            await sleep(300);
+
+            document.getElementById("trackerBox").style.display = "none";
+            document.getElementById("scanBtn").disabled = false;
+            document.getElementById("resultBox").style.display = "block";
+
+            document.getElementById("outTicker").innerText = `$${ticker}`;
+            document.getElementById("outStage").innerText = `STAGE: ${setup} • RSI ${rsi.toFixed(1)} • VOL ${volRatio.toFixed(2)}x`;
+            
+            let stBadge = document.getElementById("outStatus");
+            stBadge.innerText = finalStatus;
+            stBadge.style.background = finalStatus === "BUY" ? "var(--buy)" : (finalStatus === "WAIT" ? "var(--wait)" : "var(--skip)");
+
+            document.getElementById("outTotalScore").innerText = totalScore;
+            let color = totalScore >= 75 ? 'var(--buy)' : (totalScore >= 65 ? 'var(--wait)' : 'var(--skip)');
+            document.getElementById("outTotalScore").style.color = color;
+            document.getElementById("outScoreBar").style.width = `${totalScore}%`;
+            document.getElementById("outScoreBar").style.background = color;
+            
+            document.getElementById("scStructure").innerText=scStructure;
+            document.getElementById("scEma").innerText=scEma;
+            document.getElementById("scMacd").innerText=scMacd;
+            document.getElementById("scFibo").innerText=scFibo;
+            document.getElementById("scClassic").innerText=scClassic;
+            document.getElementById("scDynamic").innerText=scDynamic;
+            document.getElementById("scMomentum").innerText=scMomentum;
+            document.getElementById("scSetup").innerText=scSetup;
+
+            document.getElementById("outPrice").innerText=formatNumber(currClose);
+            document.getElementById("outDirection").innerText=direction;
+            document.getElementById("outDirection").style.color=direction==="BULLISH"?"var(--buy)":direction==="BEARISH"?"var(--skip)":"var(--wait)";
+            document.getElementById("outStruct").innerText=structure.label;
+            
+            document.getElementById("outEma").innerText=`${formatNumber(ema5)} / ${formatNumber(ema21)}`;
+            document.getElementById("outMacd").innerText=macdLabel;
+            document.getElementById("outCross").innerText=crossLabel;
+
+            document.getElementById("outClassicS").innerText=formatNumber(classicS); 
+            document.getElementById("outClassicR").innerText=formatNumber(classicR);
+            document.getElementById("outDynamicS").innerText=formatNumber(dynS); 
+            document.getElementById("outDynamicR").innerText=formatNumber(dynR);
+            document.getElementById("outFibo").innerText=`${formatNumber(fibS)} / ${formatNumber(fibR)}`;
+
+            document.getElementById("outBuy").innerText=plan.entryLow?fmtRange(plan.entryLow,plan.entryHigh):"NO LONG ENTRY";
+            document.getElementById("outEntryLogic").innerText=plan.logic;
+            document.getElementById("outEntryTrigger").innerText=plan.trigger;
+            document.getElementById("outSl").innerText=plan.stop?formatNumber(plan.stop):"STRUCTURE INVALIDATION";
+            document.getElementById("outTp1").innerText=plan.tp1?formatNumber(plan.tp1):"-";
+            document.getElementById("outTp2").innerText=plan.tp2?formatNumber(plan.tp2):"-";
+            document.getElementById("outRR").innerText=plan.rr?`${plan.rr.toFixed(2)}R`:"-";
+            
+            document.getElementById("outExitTrigger").innerText=direction==="BULLISH"
+                ?"TP1/TP2 bertahap; full exit bila close < EMA21 dan HL terakhir gagal"
+                :"Belum ada long entry; tunggu reclaim EMA21 + HL baru";
+
+            let sentimentHtml = "";
+            if (totalScore >= 75) {
+                sentimentHtml = `<b>🔥 Sentimen Positif (Bullish Bias)</b><br>Berdasarkan pergerakan teknikal yang agresif, emiten kemungkinan sedang diakumulasi institusi atau memiliki katalis positif. Disarankan untuk <i>hold</i> mengikuti garis tren MA20.`;
+            } else if (totalScore <= 40) {
+                sentimentHtml = `<b>🩸 Sentimen Negatif (Bearish Bias)</b><br>Volume distribusi lebih dominan. Emiten mungkin sedang terkena <i>downgrade</i> atau merespons berita negatif di pasar/sektornya.`;
+            } else {
+                sentimentHtml = `<b>⚖️ Sentimen Netral (Wait & See)</b><br>Emiten sedang dalam fase konsolidasi. Pergerakan harga cenderung dipengaruhi oleh fluktuasi IHSG secara umum. Tunggu sinyal <i>breakout</i>.`;
+            }
+            
+            document.getElementById("outNews").innerHTML = sentimentHtml;
+
+        } catch (error) {
+            document.getElementById("trackerBox").style.display = "none";
+            document.getElementById("scanBtn").disabled = false;
+            alert(error.message);
+        }
+    }
+
+    function scanFromRadar(ticker) {
+        navTo('scannerPage');
+        document.getElementById("tickerInput").value = ticker;
+        startEngine();
+    }
+
+    async function initDashboard() {
+        let isAuthenticated = await checkAuth();
+        if(!isAuthenticated) return;
+        
+        await sleep(600); 
+        
+        try {
+            const outReq = await fetch(`${GOOGLE_PROXY_URL}?action=getMarketOutlook`);
+            const outRes = await outReq.json();
+            if (outRes.status === 'success' && outRes.data) {
+                document.getElementById('topIhsgLevel').innerText = formatNumber(outRes.data.level);
+                let trendEl = document.getElementById('topIhsgTrend');
+                trendEl.innerText = `${outRes.data.trend} Market`;
+                if (outRes.data.trend === "BULLISH") trendEl.style.color = 'var(--buy)'; else if (outRes.data.trend === "BEARISH") trendEl.style.color = 'var(--skip)'; else trendEl.style.color = 'var(--wait)'; 
+                document.getElementById('topIhsgDesc').innerText = outRes.data.summary;
+            }
+        } catch(e) {}
+
+        await sleep(600); 
+
+        const grid = document.getElementById("top10Grid");
+        try {
+            const req = await fetch(`${GOOGLE_PROXY_URL}?action=getTop10`);
+            const top10Res = await req.json();
+            if(top10Res.status === 'success' && top10Res.data && top10Res.data.length > 0) {
+                grid.innerHTML = top10Res.data.map(item => {
+                    let t = item.ticker.replace('.JK', '');
+                    return `
+                    <div class="radar-card" onclick="scanFromRadar('${item.ticker}')">
+                        <div class="rc-top">
+                            <div class="rc-logo">${t.substring(0,2)}</div>
+                            <div class="rc-info">
+                                <span class="rc-ticker">${t}</span>
+                                <span class="rc-score">${item.score}% ⭐</span>
+                            </div>
+                        </div>
+                        <div class="rc-setup">🎯 ${item.setup.substring(0, 15)}</div>
+                    </div>
+                `}).join('');
+            } else { grid.innerHTML = `<div class="radar-card"><div class="rc-ticker">Waiting API...</div></div>`; }
+        } catch(err) { grid.innerHTML = `<div class="radar-card"><div class="rc-ticker">Error Backend</div></div>`; }
+    }
+
+    window.onload = function() {
+        new TradingView.widget({
+            "autosize": true, "symbol": "IDX:COMPOSITE", "interval": "D",
+            "theme": "dark", "style": "1", "locale": "id",
+            "hide_top_toolbar": true, "hide_legend": true,
+            "container_id": "tv_chart_container", "backgroundColor": "rgba(21, 30, 50, 0.7)"
+        });
+
+        initDashboard(); 
+    };
+</script>
+</body>
+</html>
