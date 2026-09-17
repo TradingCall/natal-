@@ -3,17 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Undangan Natal ✨ The Dayspring</title>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Pacifico&display=swap" rel="stylesheet">
+    <title>VIP Invitation ✨ The Dayspring</title>
+    <!-- Font baru: Cinzel untuk kesan Kerajaan/Epik & Nunito untuk kemudahan membaca -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Nunito:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --gold: #d4af37;
-            --deep-red: #8b0000;
-            --cream: #fffdd0;
-            --night-blue: #0f172a;
-            --text-dark: #2c2c2c;
-            --glass-bg: rgba(255, 255, 255, 0.75);
-            --glass-border: rgba(212, 175, 55, 0.4);
+            --gold-premium: #d4af37;
+            --gold-light: #fbe08d;
+            --deep-red: #7a0000;
+            --obsidian: #050814;
+            --night-sky: #0b1121;
+            --glass-bg: rgba(10, 15, 30, 0.7);
+            --glass-border: rgba(212, 175, 55, 0.25);
         }
 
         * {
@@ -26,36 +27,59 @@
         }
 
         body {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            /* Background Gelap Elegan ala Sinematik */
+            background: radial-gradient(circle at 50% 30%, #172138 0%, var(--obsidian) 80%, #000000 100%);
             width: 100vw;
             height: 100vh;
             overflow: hidden;
-            color: var(--text-dark);
+            color: #ffffff;
             position: relative;
             touch-action: manipulation;
         }
 
-        /* Music Button */
+        /* Ambient Glow di tengah layar */
+        .ambient-glow {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80vw;
+            height: 80vw;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.08) 0%, rgba(0,0,0,0) 70%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Music Button - Premium Gold Ring */
         #music-btn {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            top: 25px;
+            right: 25px;
             z-index: 100;
-            background: rgba(255, 255, 255, 0.2);
-            border: 1px solid var(--gold);
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--gold-premium);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            padding: 10px;
             border-radius: 50%;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            font-size: 1.2rem;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2), inset 0 0 10px rgba(212, 175, 55, 0.1);
             width: 45px;
             height: 45px;
             display: flex;
             justify-content: center;
             align-items: center;
-            color: var(--gold);
+            color: var(--gold-light);
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .music-playing {
+            animation: pulseRing 2s infinite alternate;
+        }
+
+        @keyframes pulseRing {
+            0% { box-shadow: 0 0 10px rgba(212, 175, 55, 0.2), inset 0 0 5px rgba(212, 175, 55, 0.1); }
+            100% { box-shadow: 0 0 25px rgba(212, 175, 55, 0.6), inset 0 0 15px rgba(212, 175, 55, 0.3); transform: scale(1.05); }
         }
 
         /* Scene Container */
@@ -71,144 +95,136 @@
             align-items: center;
             opacity: 0;
             visibility: hidden;
-            transition: opacity 0.6s ease;
-            padding: 20px;
+            transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 25px;
             text-align: center;
             z-index: 10;
         }
 
-        .scene.active {
-            opacity: 1;
-            visibility: visible;
-            z-index: 20;
-        }
+        .scene.active { opacity: 1; visibility: visible; z-index: 20; }
 
-        /* Glassmorphism Card */
+        /* Dark Premium Glass Card */
         .glass-card {
             background: var(--glass-bg);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
             border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 25px 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border-top: 1px solid rgba(255,255,255,0.15);
+            border-radius: 16px;
+            padding: 35px 25px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8), inset 0 0 30px rgba(212, 175, 55, 0.03);
             width: 90%;
-            max-width: 400px;
+            max-width: 420px;
+            position: relative;
         }
 
-        /* Buttons */
-        .btn {
-            background: linear-gradient(135deg, #d4af37, #aa7c11);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 50px;
-            font-size: 1.1rem;
+        /* Epic Typography */
+        h1, h2, .cinematic-text {
+            font-family: 'Cinzel', serif;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+        
+        h1 { 
+            font-size: 2.2rem; 
+            color: var(--gold-light); 
+            margin-bottom: 12px; 
+            text-shadow: 0 4px 15px rgba(0,0,0,0.9), 0 0 20px rgba(212, 175, 55, 0.3); 
             font-weight: 700;
+        }
+        h2 { font-size: 1.5rem; margin-bottom: 15px; color: var(--gold-premium); font-weight: 600; }
+        
+        p { 
+            font-size: 1.1rem; 
+            margin-bottom: 12px; 
+            font-weight: 300; 
+            color: #e2e8f0; 
+            text-shadow: 0 2px 5px rgba(0,0,0,0.8); 
+            line-height: 1.6;
+        }
+
+        /* Premium Buttons */
+        .btn {
+            background: linear-gradient(135deg, #a67c00 0%, #d4af37 50%, #8a6300 100%);
+            color: #000;
+            border: 1px solid #ffe699;
+            padding: 14px 30px;
+            border-radius: 4px; /* Sudut agak kotak untuk kesan elegan */
+            font-size: 1rem;
+            font-weight: 800;
+            font-family: 'Cinzel', serif;
+            letter-spacing: 2px;
             cursor: pointer;
-            margin-top: 20px;
-            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
-            transition: transform 0.2s;
+            margin-top: 25px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6), inset 0 2px 5px rgba(255,255,255,0.4);
+            transition: all 0.3s ease;
             position: relative;
             z-index: 50;
+            text-transform: uppercase;
         }
-        .btn:active { transform: scale(0.95); }
-
-        /* Typography */
-        h1 { font-family: 'Pacifico', cursive; font-size: 2.3rem; color: #d4af37; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
-        h2 { font-size: 1.6rem; margin-bottom: 10px; color: #1e293b; }
-        p { font-size: 1rem; margin-bottom: 10px; font-weight: 600; color: #333; }
-
-        /* Photo Styles */
-        .polaroid, .scrapbook, .cinematic {
-            background: white;
-            padding: 10px 10px 35px 10px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            margin-bottom: 15px;
-            width: 80%;
-            max-width: 280px;
+        .btn:active { transform: translateY(2px); box-shadow: 0 5px 10px rgba(0,0,0,0.5); }
+        .btn-outline {
+            background: transparent;
+            color: var(--gold-premium);
+            border: 1px solid var(--gold-premium);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
         }
-        
-        .polaroid { transform: rotate(-2deg); border-radius: 5px; }
-        
-        .scrapbook {
-            background: #fff9e6;
-            transform: rotate(2deg);
+
+        /* Epic Cinematic Photo Frames */
+        .epic-frame {
+            padding: 8px;
+            background: rgba(0,0,0,0.6);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            border-radius: 8px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.9), 0 0 20px rgba(212, 175, 55, 0.15);
+            margin-bottom: 25px;
+            width: 85%;
+            max-width: 320px;
             position: relative;
         }
-        .scrapbook::before {
-            content: '';
-            position: absolute;
-            top: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 20px;
-            background: rgba(212, 175, 55, 0.5);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            z-index: 2;
+        
+        /* Aksen sudut emas pada frame */
+        .epic-frame::before, .epic-frame::after {
+            content: ''; position: absolute; width: 20px; height: 20px; border: 2px solid var(--gold-premium); pointer-events: none;
         }
+        .epic-frame::before { top: -5px; left: -5px; border-right: none; border-bottom: none; }
+        .epic-frame::after { bottom: -5px; right: -5px; border-left: none; border-top: none; }
 
-        .cinematic {
-            padding: 5px;
-            border: 3px solid var(--gold);
-            transform: none;
-            background: transparent;
-            box-shadow: 0 0 30px rgba(212,175,55,0.4);
-            z-index: 10;
-        }
-
-        .polaroid img, .scrapbook img, .cinematic img {
+        .epic-frame img {
             width: 100%;
             height: auto;
-            max-height: 35vh;
+            max-height: 40vh;
             object-fit: cover;
-            object-position: center;
-            border-radius: 3px;
+            border-radius: 4px;
             display: block;
+            filter: contrast(1.1) saturate(1.1);
         }
 
-        /* Cinematic Scene Background */
+        /* Cinematic Background Overlay */
         .cinematic-bg {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            background: rgba(15,23,42,0.9);
-            z-index: 1;
-            opacity: 0;
-            transition: opacity 1s;
+            position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(2, 4, 10, 0.85); z-index: 1; opacity: 0; transition: opacity 1.5s;
         }
         .scene.active .cinematic-bg { opacity: 1; }
-        
-        #scene7 > *:not(.cinematic-bg) {
-            position: relative;
-            z-index: 5;
-        }
-        .cinematic-text { color: white; text-shadow: 0 2px 5px black; }
+        #scene7 > *:not(.cinematic-bg) { position: relative; z-index: 5; }
 
-        /* Collage Ending */
+        /* Elegant Collage Final Scene */
         .collage {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 15px;
-            width: 90%;
-            max-width: 300px;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+            margin-bottom: 20px; width: 90%; max-width: 340px;
         }
         .collage img {
-            width: 100%;
-            aspect-ratio: 1/1;
-            object-fit: cover;
-            border-radius: 8px;
-            border: 2px solid var(--gold);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            width: 100%; aspect-ratio: 4/5; object-fit: cover;
+            border-radius: 4px; border: 1px solid rgba(212, 175, 55, 0.3);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.7);
+            filter: brightness(0.9);
         }
 
-        /* Animations */
-        .fade-in, .slide-up, .pop-in { opacity: 0; }
-        .scene.active .fade-in { animation: fadeIn 1s forwards; }
-        .scene.active .slide-up { animation: slideUp 0.8s forwards; }
-        .scene.active .pop-in { animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        /* Smooth Cinematic Animations */
+        .fade-in, .slide-up, .zoom-in { opacity: 0; }
+        .scene.active .fade-in { animation: fadeIn 1.5s ease forwards; }
+        .scene.active .slide-up { animation: slideUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+        .scene.active .zoom-in { animation: zoomIn 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
 
         .delay-1 { animation-delay: 0.8s !important; }
         .delay-2 { animation-delay: 1.8s !important; }
@@ -216,225 +232,196 @@
         .delay-4 { animation-delay: 3.8s !important; }
 
         @keyframes fadeIn { to { opacity: 1; } }
-        @keyframes slideUp { 
-            0% { opacity: 0; transform: translateY(20px); }
-            100% { opacity: 1; transform: translateY(0); } 
-        }
-        @keyframes popIn { 
-            0% { opacity: 0; transform: scale(0.5); }
-            100% { opacity: 1; transform: scale(1); } 
-        }
+        @keyframes slideUp { 0% { opacity: 0; transform: translateY(40px); } 100% { opacity: 1; transform: translateY(0); } }
+        @keyframes zoomIn { 0% { opacity: 0; transform: scale(0.85); filter: blur(5px); } 100% { opacity: 1; transform: scale(1); filter: blur(0); } }
 
-        /* Typing Effect */
-        .typing-effect {
-            border-right: 2px solid var(--gold);
-            white-space: nowrap;
-            overflow: hidden;
-            margin: 0 auto;
-            width: 0;
-            color: #d4af37;
+        /* Premium Countdown Timer */
+        #countdown-timer {
+            display: flex; justify-content: center; gap: 12px; margin: 20px 0;
         }
-        .scene.active .typing-effect {
-            animation: typing 1.5s steps(22, end) forwards;
-            animation-delay: 1s;
-        }
-        @keyframes typing {
-            from { width: 0 }
-            to { width: 100% }
-        }
-
-        /* Slider / Interaksi */
-        .slider-container { width: 100%; margin: 15px 0; }
-        input[type="range"] {
-            -webkit-appearance: none;
-            width: 100%;
-            height: 12px;
-            background: rgba(255,255,255,0.3);
-            border-radius: 10px;
-            outline: none;
-        }
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            background: var(--gold);
-            box-shadow: 0 0 10px rgba(212, 175, 55, 0.8);
-        }
-
-        #verse-display {
-            min-height: 70px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 10px;
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: var(--deep-red);
+        .time-box {
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-top: 1px solid rgba(212, 175, 55, 0.6);
+            border-radius: 6px;
+            padding: 10px 5px;
+            min-width: 65px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
             text-align: center;
-            padding: 0 10px;
+        }
+        .time-box span { display: block; font-size: 1.8rem; font-weight: 700; color: var(--gold-light); font-family: 'Cinzel', serif; }
+        .time-box small { font-size: 0.65rem; color: #a0aec0; letter-spacing: 1px; font-weight: 800; }
+
+        /* Stardust Effect (Elegan & Halus) */
+        .stardust { 
+            position: absolute; top: -10px; 
+            background: #fff; border-radius: 50%; 
+            box-shadow: 0 0 8px #fff, 0 0 15px var(--gold-premium);
+            animation: fallStardust linear infinite; z-index: 1; pointer-events: none; 
+        }
+        @keyframes fallStardust {
+            0% { transform: translateY(0) scale(0.5); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.5; }
+            100% { transform: translateY(100vh) scale(1.5); opacity: 0; }
         }
 
-        /* Floating Stars & Confetti */
-        .floating-star { position: absolute; bottom: -20px; animation: floatUp linear infinite; z-index: 1; opacity: 0.6; }
-        @keyframes floatUp {
-            0% { transform: translateY(0) rotate(0deg); opacity: 0.6; }
-            100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+        /* Gold Line Separator */
+        .gold-line {
+            width: 50px; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold-premium), transparent);
+            margin: 15px auto;
         }
-        .sparkle { position: absolute; font-size: 1.2rem; animation: sparkleAnim 1.5s infinite alternate; z-index: 5; }
-        @keyframes sparkleAnim { 0% { transform: scale(0.8); opacity: 0.5; } 100% { transform: scale(1.2); opacity: 1; } }
-        
-        .confetti { position: absolute; width: 10px; height: 10px; z-index: 100; animation: fall linear forwards; }
-        @keyframes fall { to { transform: translateY(100vh) rotate(720deg); } }
-        
+
         .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
     <audio id="bgm" src="music-natal.mp3" loop></audio>
-    <div id="music-btn" onclick="toggleMusic()">🎵</div>
+    <div class="ambient-glow"></div>
+    <div id="music-btn" onclick="toggleMusic()">♪</div>
 
-    <!-- SCENE 1 -->
+    <!-- SCENE 1: THE INVITATION -->
     <div class="scene active" id="scene1">
-        <h1 class="fade-in">Shalom, Kamu ✨</h1>
-        <p class="slide-up delay-1">Ada kabar sukacita untukmu.</p>
-        <p class="slide-up delay-2">Luangkan waktu sebentar ya?</p>
-        <button class="btn pop-in delay-3" onclick="startExperienceAndNext(2)">Boleh banget ✨</button>
+        <h2 class="slide-up" style="font-size: 1rem; letter-spacing: 3px; color: #a0aec0;">Sebuah Undangan Berharga</h2>
+        <h1 class="zoom-in delay-1" style="font-size: 3rem; line-height: 1.1; margin: 15px 0;">Shalom,<br>Keluarga Terkasih</h1>
+        <div class="gold-line delay-2 fade-in"></div>
+        <p class="slide-up delay-2" style="font-size: 1.2rem;">Kisah teragung sepanjang masa menantimu.</p>
+        <button class="btn zoom-in delay-3" onclick="startExperienceAndNext(2)">Buka Perjalanan ✨</button>
     </div>
 
-    <!-- SCENE 2 -->
+    <!-- SCENE 2: THE REVELATION -->
     <div class="scene" id="scene2">
-        <p class="fade-in" style="color: white;">Tahukah kamu...</p>
-        <h2 class="typing-effect" style="color: #d4af37;">Kasih Karunia Telah Tiba</h2>
-        <p class="slide-up delay-2" style="color: white;">Menyinari dunia yang gelap.</p>
-        <p class="slide-up delay-3" style="color: #cbd5e1;">Sebuah berkat yang luar biasa 🌟</p>
-        <button class="btn pop-in delay-4" onclick="nextScene(3)">Makna apa itu?</button>
+        <p class="fade-in" style="letter-spacing: 2px; font-size: 0.9rem; text-transform: uppercase;">Dunia sempat terlelap...</p>
+        <h1 class="zoom-in delay-1" style="font-size: 2.8rem;">Hingga Kasih<br>Itu Lahir</h1>
+        <div class="gold-line delay-2 fade-in"></div>
+        <p class="slide-up delay-2">Menembus kepekatan malam,</p>
+        <p class="slide-up delay-3" style="color: var(--gold-light);">Membawa keselamatan bagi bumi.</p>
+        <button class="btn zoom-in delay-4" onclick="nextScene(3)">Saksikan Keajaibannya</button>
     </div>
 
-    <!-- SCENE 3 -->
+    <!-- SCENE 3: THE LOVE -->
     <div class="scene" id="scene3">
-        <span class="sparkle" style="top: 25%; left: 15%;">⭐</span>
-        <span class="sparkle" style="top: 20%; right: 20%; animation-delay: 0.5s">⭐</span>
-        <span class="sparkle" style="bottom: 35%; left: 25%; animation-delay: 1s">⭐</span>
-        
-        <h1 class="pop-in">KARENA KASIHNYA 🤍</h1>
-        <p class="slide-up delay-1" style="color: white;">Sang Juruselamat telah lahir...</p>
-        <p class="slide-up delay-2" style="font-size: 1.3rem; color: #d4af37;">Membawa terang bagi setiap hati.</p>
-        <button class="btn fade-in delay-3" onclick="nextScene(4)">Lihat Kenangan →</button>
+        <h1 class="zoom-in" style="font-size: 3.5rem;">CINTA<br><span style="font-size: 1.5rem; color: #e2e8f0;">DARI SURGA</span></h1>
+        <div class="gold-line delay-1 fade-in"></div>
+        <p class="slide-up delay-1">Sang Raja Semesta merendahkan diri...</p>
+        <p class="slide-up delay-2" style="font-size: 1.3rem; color: var(--gold-premium); font-weight: bold; font-family: 'Cinzel', serif;">Hadir sebagai Terang yang Abadi.</p>
+        <button class="btn btn-outline zoom-in delay-3" onclick="nextScene(4)">Kisah Terang Bermula ➔</button>
     </div>
 
-    <!-- SCENE 4 -->
+    <!-- SCENE 4: THE MANGER (e.png -> download (8).jpg) -->
     <div class="scene" id="scene4">
-        <div class="polaroid pop-in">
-            <img src="e.png" alt="Kelahiran Yesus 1">
+        <div class="epic-frame zoom-in">
+            <!-- FOTO 1: download (8).jpg -->
+            <img src="download (8).jpg" alt="Manger Scene">
         </div>
-        <p class="slide-up delay-1">Kandang Betlehem...</p>
-        <p class="slide-up delay-2">tempat yang sederhana,</p>
-        <p class="slide-up delay-3">namun menjadi awal pengharapan dunia ✨</p>
-        <button class="btn fade-in delay-4" onclick="nextScene(5)">Lanjut →</button>
+        <h2 class="slide-up delay-1">Kandang yang Hina</h2>
+        <p class="slide-up delay-2">Bukan di istana megah,</p>
+        <p class="slide-up delay-3">Melainkan di tempat sederhana,<br>pengharapan dunia dilahirkan.</p>
+        <button class="btn btn-outline zoom-in delay-4" onclick="nextScene(5)">Lanjutkan ➔</button>
     </div>
 
-    <!-- SCENE 5 -->
+    <!-- SCENE 5: THE STAR (r.png -> download (10).jpg) -->
     <div class="scene" id="scene5">
-        <div class="polaroid pop-in" style="transform: rotate(3deg);">
-            <img src="r.png" alt="Kelahiran Yesus 2">
+        <div class="epic-frame zoom-in">
+            <!-- FOTO 2: download (10).jpg -->
+            <img src="download (10).jpg" alt="Star Scene">
         </div>
-        <p class="fade-in delay-1">Bintang timur bersinar terang...</p>
-        <p class="slide-up delay-2">menuntun orang majus</p>
-        <p class="slide-up delay-3">menuju Sang Terang Sejati 🌟</p>
-        <button class="btn pop-in delay-4" onclick="nextScene(6)">Berikutnya →</button>
+        <h2 class="slide-up delay-1">Penuntun Langkah</h2>
+        <p class="slide-up delay-2">Bintang fajar bersinar membelah gulita,</p>
+        <p class="slide-up delay-3">Menuntun hati yang rindu<br>untuk menyembah Sang Raja Sejati.</p>
+        <button class="btn btn-outline zoom-in delay-4" onclick="nextScene(6)">Lanjutkan ➔</button>
     </div>
 
-    <!-- SCENE 6 -->
+    <!-- SCENE 6: THE DAYSPRING (l.png -> download (9).jpg) -->
     <div class="scene" id="scene6">
-        <div class="scrapbook pop-in">
-            <img src="l.png" alt="Kelahiran Yesus 3">
+        <div class="epic-frame zoom-in">
+            <!-- FOTO 3: download (9).jpg -->
+            <img src="download (9).jpg" alt="Cross Tree Scene">
         </div>
-        <h2 class="slide-up delay-1" style="color: #8b0000;">THE DAYSPRING</h2>
-        <p class="slide-up delay-2" style="color: white;">Fajar pelepasan dari tempat tinggi</p>
-        <p class="slide-up delay-3" style="color: #cbd5e1;">hadir mengunjungi kita.</p>
-        <button class="btn fade-in delay-4" onclick="nextScene(7)">Pesan Firman →</button>
+        <h1 class="slide-up delay-1" style="font-size: 2.5rem; text-shadow: 0 5px 15px rgba(0,0,0,1);">The Dayspring</h1>
+        <div class="gold-line delay-2 fade-in"></div>
+        <p class="slide-up delay-2">Fajar yang merekah dari tempat mahatinggi,</p>
+        <p class="slide-up delay-3" style="color: var(--gold-light);">Lahir untuk menyelamatkan dan mengasihi kita.</p>
+        <button class="btn zoom-in delay-4" onclick="nextScene(7)">Pesan Keabadian 📜</button>
     </div>
 
-    <!-- SCENE 7 -->
+    <!-- SCENE 7: VERSE & CULMINATION (i.png -> download (11).jpg) -->
     <div class="scene" id="scene7">
         <div class="cinematic-bg"></div> 
         
-        <div class="cinematic pop-in delay-1">
-            <img src="i.png" alt="Kelahiran Yesus 4">
+        <div class="epic-frame zoom-in delay-1" style="box-shadow: 0 0 40px rgba(212, 175, 55, 0.4);">
+            <!-- FOTO 4: download (11).jpg -->
+            <img src="download (11).jpg" alt="The King is Here">
         </div>
-        <h2 class="cinematic-text slide-up delay-2" style="color: #d4af37;">LUKAS 1:78-79</h2>
-        <p class="cinematic-text slide-up delay-3" style="font-size: 0.95rem; padding: 0 15px; line-height: 1.4;">
+        <h2 class="slide-up delay-2" style="font-size: 2rem;">LUKAS 1:78-79</h2>
+        <p class="slide-up delay-3" style="font-size: 1.05rem; padding: 0 10px; font-style: italic; color: #cbd5e1;">
             "Oleh rahmat dan belas kasihan dari Allah kita, di mana fajar dari lumrah (the dayspring) akan menyinari kita untuk menerangi mereka yang duduk di dalam gelap..."
         </p>
-        <button class="btn pop-in delay-4" onclick="nextScene(8)">Undangan Acara 📌</button>
+        <button class="btn zoom-in delay-4" onclick="nextScene(8)">Buka Undangan Resmi 🗝️</button>
     </div>
 
-    <!-- SCENE 8 -->
+    <!-- SCENE 8: THE OFFICIAL INVITATION -->
     <div class="scene" id="scene8">
-        <div class="glass-card pop-in">
-            <h2>GBI ROCK CIANJUR</h2>
-            <p style="margin-top: 5px; color: #d4af37; font-weight: 800;">Mempersembahkan Perayaan Natal</p>
-            <p style="font-size: 1.1rem; margin: 10px 0;">✨ <b>THE DAYSPRING</b> ✨</p>
-            <p style="font-size: 0.9rem; color: #555;">Klik tombol di bawah untuk membuka berkat hari ini 👇</p>
-            <button class="btn" style="width: 100%; margin-top: 5px;" onclick="generateVerse()">🌟 BUKA AYAT & BERKAT 🌟</button>
-            <div id="verse-display"></div>
-            <button id="btn-lanjut-8" class="btn hidden" style="background: #8b0000; color: white; width: 100%;" onclick="nextScene(9)">Menuju Puncak Acara →</button>
+        <div class="glass-card zoom-in">
+            <h2 style="font-size: 1rem; letter-spacing: 4px; color: #a0aec0; margin-bottom: 5px;">GBI ROCK CIANJUR</h2>
+            <h1 style="font-size: 2.2rem; margin: 10px 0;">Perayaan Natal</h1>
+            <h1 style="font-size: 1.8rem; color: #fff; letter-spacing: 2px;">THE DAYSPRING</h1>
+            
+            <div class="gold-line fade-in"></div>
+
+            <p style="font-size: 1rem; color: #cbd5e1; margin: 20px 0;">Sebuah kehormatan bagi kami untuk merayakan momen sakral ini bersama Anda.</p>
+            
+            <button class="btn" style="width: 100%; letter-spacing: 1px;" onclick="nextScene(10)">Lihat Detail Acara</button>
         </div>
     </div>
 
-    <!-- SCENE 9 -->
-    <div class="scene" id="scene9">
-        <div class="glass-card fade-in">
-            <p>Respon Hati</p>
-            <h2>Seberapa besar sukacitamu menyambut Natal?</h2>
-            
-            <div class="slider-container">
-                <input type="range" id="joy-slider" min="0" max="100" value="0">
-            </div>
-            
-            <h1 id="slider-value" style="color: #d4af37;">0%</h1>
-            <p id="slider-msg" style="color: #8b0000; font-weight: 800; display: none;">LUAR BIASA!<br>Sukacita Natal meluap penuh! ✨</p>
-            
-            <button id="btn-lanjut-9" class="btn hidden" style="width: 100%;" onclick="nextScene(10)">Lihat Detail Undangan ✨</button>
-        </div>
-    </div>
-
-    <!-- SCENE 10 (FINAL) -->
+    <!-- SCENE 10 (FINAL): DETAILS & COUNTDOWN -->
     <div class="scene" id="scene10">
         <div class="collage fade-in delay-1">
-            <img src="e.png" alt="Foto 1">
-            <img src="r.png" alt="Foto 2">
-            <img src="l.png" alt="Foto 3">
-            <img src="i.png" alt="Foto 4">
+            <img src="download (8).jpg" alt="Epic 1">
+            <img src="download (10).jpg" alt="Epic 2">
+            <img src="download (9).jpg" alt="Epic 3">
+            <img src="download (11).jpg" alt="Epic 4">
         </div>
         
-        <p class="slide-up delay-2" style="color: white;">Mari Bergabung Bersama Kami di</p>
-        <div class="slide-up delay-3" style="font-size: 1.1rem; line-height: 1.6; color: #d4af37; font-weight: 700;">
-            📍 GBI ROCK CIANJUR<br>
-            Tema: <b>The Dayspring</b><br>
-            <span style="font-size: 0.9rem; color: #cbd5e1;">(Berdasarkan Lukas 1:78-79)</span>
+        <h1 class="slide-up delay-2" style="font-size: 1.8rem; margin-top: 5px;">Kehadiranmu Ditunggu</h1>
+        
+        <div class="slide-up delay-3" style="background: rgba(0,0,0,0.6); border: 1px solid rgba(212,175,55,0.4); padding: 20px; border-radius: 10px; width: 95%; max-width: 380px; box-shadow: 0 10px 30px rgba(0,0,0,0.8);">
+            <p style="color: var(--gold-light); font-size: 1.1rem; margin-bottom: 8px; font-family: 'Cinzel', serif; font-weight: bold; letter-spacing: 1px;">📍 GBI ROCK CIANJUR</p>
+            <div class="gold-line" style="margin: 10px auto; width: 30px;"></div>
+            <p style="margin-bottom: 5px; font-weight: bold;">Jadwal Ibadah Natal:</p>
+            <p style="margin-bottom: 5px; color: var(--gold-premium); font-size: 1.2rem;">Minggu, 20 Desember</p>
+            <p style="margin-bottom: 15px; color: #fff; font-weight: bold;">Pukul 15:00 WIB</p> 
+            
+            <!-- Epic Countdown -->
+            <div id="countdown-timer">
+                <div class="time-box"><span id="cd-days">00</span><small>HARI</small></div>
+                <div class="time-box"><span id="cd-hours">00</span><small>JAM</small></div>
+                <div class="time-box"><span id="cd-mins">00</span><small>MENIT</small></div>
+                <div class="time-box"><span id="cd-secs">00</span><small>DETIK</small></div>
+            </div>
         </div>
         
-        <h1 class="pop-in delay-4" style="font-size: 1.8rem; margin-top: 10px; color: #d4af37;">Selamat Natal & Tahun Baru! 🎄</h1>
-        
-        <button class="btn pop-in delay-4" style="margin-top: 10px;" onclick="resetExperience()">🔄 Ulangi Undangan</button>
+        <p class="fade-in delay-4" style="margin-top: 25px; cursor: pointer; color: #a0aec0; font-size: 0.9rem; text-decoration: underline;" onclick="resetExperience()">Saksikan Ulang Undangan</p>
     </div>
 
     <script>
+        // 1. Audio Controller (Epic Mode)
         let musicPlaying = false;
         const audio = document.getElementById('bgm');
-        let clickCount = 0;
 
         function toggleMusic() {
+            const btn = document.getElementById('music-btn');
             if (musicPlaying) {
                 audio.pause();
-                document.getElementById('music-btn').innerText = '🎵';
+                btn.classList.remove('music-playing');
+                btn.style.color = 'white';
             } else {
                 audio.play().catch(e => console.log("Audio play failed:", e));
-                document.getElementById('music-btn').innerText = '⏸️';
+                btn.classList.add('music-playing');
+                btn.style.color = 'var(--gold-light)';
             }
             musicPlaying = !musicPlaying;
         }
@@ -445,90 +432,55 @@
         }
 
         function nextScene(n) {
-            document.querySelectorAll('.scene').forEach(el => {
-                el.classList.remove('active');
-            });
+            document.querySelectorAll('.scene').forEach(el => el.classList.remove('active'));
             const next = document.getElementById(`scene${n}`);
-            if(next) {
-                next.classList.add('active');
-            }
+            if(next) next.classList.add('active');
         }
 
-        const verses = [
-            "“Ia akan memimpin langkah kita ke jalan damai sejahtera.” (Lukas 1:79)",
-            "“Terang itu bercahaya di dalam kegelapan dan kegelapan itu tidak menguasainya.” (Yohanes 1:5)",
-            "“Sebab seorang anak telah lahir untuk kita... dan namanya disebutkan orang: Raja Damai.” (Yesaya 9:5)",
-            "“Kemuliaan bagi Allah di tempat yang mahatinggi dan damai sejahtera di bumi...” (Lukas 2:14)"
-        ];
-
-        function generateVerse() {
-            clickCount++;
-            const display = document.getElementById('verse-display');
-            const random = verses[Math.floor(Math.random() * verses.length)];
-            
-            display.innerHTML = `<span style="animation: popIn 0.3s forwards">${random}</span>`;
-            
-            if(clickCount >= 2) {
-                document.getElementById('btn-lanjut-8').classList.remove('hidden');
-            }
-        }
-
-        const slider = document.getElementById('joy-slider');
-        slider.addEventListener('input', function(e) {
-            const val = e.target.value;
-            const display = document.getElementById('slider-value');
-            const msg = document.getElementById('slider-msg');
-            const btn = document.getElementById('btn-lanjut-9');
-            
-            if(val < 100) {
-                display.innerText = val + '%';
-            } else {
-                display.innerText = '100% 🌟';
-                msg.style.display = 'block';
-                e.target.disabled = true;
-                btn.classList.remove('hidden');
-                triggerConfetti();
-            }
-        });
-
-        function triggerConfetti() {
-            for(let i=0; i<40; i++) {
-                const colors = ['#d4af37', '#8b0000', '#fffdd0', '#ffffff', '#cbd5e1'];
-                const confetti = document.createElement('div');
-                confetti.classList.add('confetti');
-                confetti.style.left = Math.random() * 100 + 'vw';
-                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
-                document.body.appendChild(confetti);
-                setTimeout(() => confetti.remove(), 4000);
-            }
-        }
-
-        function createStar() {
+        // 2. Efek Debu Bintang / Glowing Stardust ala Sinematik
+        function createStardust() {
             const star = document.createElement('div');
-            star.innerHTML = '⭐';
-            star.classList.add('floating-star');
+            star.classList.add('stardust');
+            
+            // Randomize size, position, and duration
+            const size = Math.random() * 3 + 1;
+            star.style.width = size + 'px';
+            star.style.height = size + 'px';
             star.style.left = Math.random() * 100 + 'vw';
-            star.style.animationDuration = (Math.random() * 4 + 4) + 's';
-            star.style.fontSize = (Math.random() * 1 + 0.5) + 'rem';
+            star.style.animationDuration = (Math.random() * 4 + 6) + 's'; // 6-10 detik jatuh
+            
             document.body.appendChild(star);
-            setTimeout(() => star.remove(), 8000);
+            setTimeout(() => star.remove(), 10000);
         }
-        setInterval(createStar, 1500);
+        setInterval(createStardust, 400); // Muncul setiap 0.4 detik
 
+        // 3. Countdown Timer (20 Desember Jam 15:00 WIB)
+        function updateCountdown() {
+            const currentYear = new Date().getFullYear();
+            const targetDate = new Date(`Dec 20, ${currentYear} 15:00:00`).getTime();
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            if (distance < 0) {
+                document.getElementById("countdown-timer").innerHTML = "<h3 style='color: var(--gold-light); margin: 10px 0; font-family: Cinzel, serif;'>✨ IBADAH TELAH DIMULAI ✨</h3>";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("cd-days").innerText = days.toString().padStart(2, '0');
+            document.getElementById("cd-hours").innerText = hours.toString().padStart(2, '0');
+            document.getElementById("cd-mins").innerText = minutes.toString().padStart(2, '0');
+            document.getElementById("cd-secs").innerText = seconds.toString().padStart(2, '0');
+        }
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // 4. Reset Experience
         function resetExperience() {
-            clickCount = 0;
-            document.getElementById('verse-display').innerHTML = '';
-            document.getElementById('btn-lanjut-8').classList.add('hidden');
-            document.getElementById('btn-lanjut-9').classList.add('hidden');
-            
-            const slider = document.getElementById('joy-slider');
-            slider.value = 0;
-            slider.disabled = false;
-            
-            document.getElementById('slider-value').innerText = '0%';
-            document.getElementById('slider-msg').style.display = 'none';
-
             nextScene(1);
         }
     </script>
